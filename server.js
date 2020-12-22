@@ -1,13 +1,16 @@
-const express = require("express");
-
-const app = express();
-const PORT = process.env.PORT
-
-app.listen(PORT,function(){
-    console.log('listening on 8080')
+var http=require('http');
+var fs=require('fs');
+var app=http.createServer(function(request,response){
+    var url=request.url;
+    if(request.url=='/'){
+        url='/index.html';
+    }
+    if(request.url=='/favicon.ico'){
+        response.writeHead(404);
+        response.end();
+        return;
+    }
+    response.writeHead(200);
+    response.end(fs.readFileSync(__dirname+url));
 });
-
-app.get('/',function(요청, 응답){
-    응답.sendFile(__dirname+'/index.html')
-    응답.sendFile(__dirname+'css/style.css')
-});
+app.listen(process.env.PORT || 3000);
